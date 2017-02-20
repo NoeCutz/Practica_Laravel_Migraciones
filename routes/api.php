@@ -22,7 +22,5 @@ Route::get('sellers','SellersController@index');
 Route::get('sellers/{id}','SellersController@show');
 Route::post('sellers','SellersController@store');
 Route::put('sellers/{id}','SellersController@update');
-Route::patch('sellers/{id}','SellersController@partial_update');
+Route::patch('sellers/{id}','SellersController@update');
 Route::delete('sellers/{id}','SellersController@destroy');
-Route::post();
-Route::put();
