@@ -16,7 +16,6 @@ class ProductsController extends Controller
     $products = Product::all();
     $list_products = array();
     foreach($products as $i => $product){
-
       $product_attributes = [$product, $product -> seller(), $product -> labels()];
       $list_products[] = $product_attributes;
     }
@@ -78,6 +77,7 @@ class ProductsController extends Controller
   {
 
     $reviews = $product -> reviews() ;
+
     for($i=0; $i<$reviews->count();$i++){
       $review = $reviews -> get("id",$i+1);
       $review -> delete();
