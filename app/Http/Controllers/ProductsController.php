@@ -17,15 +17,17 @@ class ProductsController extends Controller
     $list_products = array();
     foreach($products as $i => $product){
 
-      $list_attributes = [$product, $product -> seller(), $product -> labels()];
-      $list_products[] = $list_attribute;
+      $product_attributes = [$product, $product -> seller(), $product -> labels()];
+      $list_products[] = $product_attributes;
     }
     return Response::json($list_products);
   }
 
   public function show(Product $product)
   {
-    return Response::json($list_attributes with(akdak));
+    $product_attributes = [$product, $product -> seller, $product -> labels];
+
+    return Response::json($product_attributes);
   }
 
   public function store(ProductRequest $request)

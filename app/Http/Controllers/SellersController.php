@@ -42,8 +42,13 @@ class SellersController extends Controller
     {
       $attributes = $request->all();
       $address = new Address($attributes);
-      $seller->address()->save($address);
-      return Response::json($address);
+      if($seller -> address === null){
+        $seller->address()->save($address);
+        return Response::json($address);
+      }else{
+        echo "El vendedor ya contiene una direccion";
+      }
+
     }
 
     public function update_address(Request $request,Seller $seller)
