@@ -22,7 +22,7 @@ Route::get('sellers','SellersController@index');
 Route::get('sellers/{seller}','SellersController@show');
 Route::post('sellers','SellersController@store');
 Route::put('sellers/{seller}', 'SellersController@update');
-Route::patch('sellers/{seller}','SellersController@update');
+Route::patch('sellers/{seller}','SellersController@update_partial');
 Route::delete('sellers/{seller}','SellersController@destroy');
 Route::post('sellers/{seller}/address','SellersController@store_address');
 Route::put('sellers/{seller}/address','SellersController@update_address');

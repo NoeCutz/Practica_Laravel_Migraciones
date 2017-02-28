@@ -6,6 +6,8 @@ use App\Seller;
 use Illuminate\Http\Request;
 use Response;
 use App\Address;
+use App\Http\Requests\SellerRequestStore;
+use App\Http\Requests\SellerRequestUpdate;
 
 class SellersController extends Controller
 {
@@ -18,14 +20,21 @@ class SellersController extends Controller
       return Response::json($seller);
     }
 
-    public function store(Request $request)
+    public function store(SellerRequestStore $request)
     {
       $attributes = $request->all();
       $seller= Seller::create($attributes);
       return Response::json($seller);
     }
 
-    public function update(Request $request,Seller $seller)
+    public function update(SellerRequestStore $request,Seller $seller)
+    {
+      $attributes = $request->all();
+      $seller-> update($attributes);
+      return Response::json($seller);
+    }
+
+    public function update_partial(SellerRequestUpdate $request, Seller $seller)
     {
       $attributes = $request->all();
       $seller-> update($attributes);
@@ -44,11 +53,11 @@ class SellersController extends Controller
       $address = new Address($attributes);
       if($seller -> address === null){
         $seller->address()->save($address);
-        return Response::json($address);
-      }else{
-        echo "El vendedor ya contiene una direccion";
-      }
 
+      }else{
+        $seller ->address->update($address);
+      }
+      return Response::json($address);
     }
 
     public function update_address(Request $request,Seller $seller)

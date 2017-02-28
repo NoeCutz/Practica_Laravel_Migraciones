@@ -44,13 +44,13 @@ $factory->define(\App\Review::class, function (Faker\Generator $faker) {
   ];
 });
 
-$factory->define(App\Label::class, function (Faker\Generator $faker) {
+$factory->define(\App\Label::class, function (Faker\Generator $faker) {
      return [
         'name' => $faker->word
     ];
 });
 
-$factory->define(App\Address::class, function (Faker\Generator $faker) {
+$factory->define(\App\Address::class, function (Faker\Generator $faker) {
      return [
         'address' => $faker->text(),
         'city' => $faker->word,

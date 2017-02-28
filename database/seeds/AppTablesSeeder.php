@@ -16,19 +16,20 @@ class AppTablesSeeder extends Seeder
         $numOfReviews=10;
         $numOfLabels=5;
 
-        factory(App\Label::class,$numOfLabels)->create();
+        factory(\App\Label::class,$numOfLabels)->create();
 
-       factory(App\Seller::class, $numOfSellers)->create();
+       factory(\App\Seller::class, $numOfSellers)->create();
 
        $seller_ids=App\Seller::all('id');
 
 
-       for($i=0; $i<$numOfSellers;$i++){
-         $seller_id = $seller_ids->get('id',$i+1);
+       for($i=1; $i<=$numOfSellers;$i++){
+         $seller_id = $seller_ids->get('id',$i);
 
-         factory(App\Address::class)->create(['seller_id'=>$seller_id]);
+         factory(\App\Address::class)->create(['seller_id'=>$seller_id]);
 
-         factory(App\Product::class,$numOfProducts)->create(['seller_id'=>$seller_id])->each(function($p){
+         factory(\App\Product::class,$numOfProducts)->create([
+           'seller_id'=>$seller_id])->each(function($p){
            $p->labels()->save(App\Label::all()->random());
          });
 
@@ -37,10 +38,10 @@ class AppTablesSeeder extends Seeder
 
        $products_id=App\Product::all('id');
 
-       for($i=0;$i<$numOfReviews;$i++){
-        factory(App\Review::class,$numOfReviews)->create(['product_id'=>$products_id->get('id',$i+1)]);
+       for($i=1;$i<=$numOfReviews;$i++){
+        factory(\App\Review::class,$numOfReviews)->create(
+          ['product_id'=>$products_id->get('id',$i)]);
        }
-
 
     }
 }

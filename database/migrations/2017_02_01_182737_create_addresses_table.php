@@ -20,7 +20,7 @@ class CreateAddressesTable extends Migration
        $table->string('region');
        $table->string('country');
        $table->string('postalcode');
-       $table->integer('seller_id')->unsigned();
+      $table->integer('seller_id')->unsigned();
        $table->timestamps();
      });
     }

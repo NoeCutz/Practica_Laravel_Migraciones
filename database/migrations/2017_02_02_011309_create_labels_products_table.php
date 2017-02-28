@@ -19,7 +19,7 @@ class CreateLabelsProductsTable extends Migration
           ->references('id')
           ->on('labels');
 
-          $table->integer('product_id')->unsigned();
+        $table->integer('product_id')->unsigned();
         $table->foreign('product_id')
         ->references('id')
         ->on('products');
