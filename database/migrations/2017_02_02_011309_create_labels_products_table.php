@@ -17,13 +17,14 @@ class CreateLabelsProductsTable extends Migration
           $table->integer('label_id')->unsigned();
           $table->foreign('label_id')
           ->references('id')
-          ->on('labels');
+          ->on('labels')
+          ->onDelete('cascade');
 
         $table->integer('product_id')->unsigned();
         $table->foreign('product_id')
         ->references('id')
-        ->on('products');
-
+        ->on('products')
+        ->onDelete('cascade');
        $table->timestamps();
 
      });

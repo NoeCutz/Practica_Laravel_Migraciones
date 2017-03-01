@@ -35,6 +35,6 @@ Route::post('products','ProductsController@store');
 Route::put('products/{product}', 'ProductsController@update');
 Route::patch('products/{product}','ProductsController@update_partial');
 Route::delete('products/{product}','ProductsController@destroy');
-Route::post('products/{product}/review','ProductsController@store_review');
+Route::post('products/{product}/revieww','ProductsController@store_review');
 Route::get('products/{product}/reviews','ProductsController@index_reviews');
-Route::delete('products/{product}/{review}','ProductsController@destroy_review');
+Route::delete('products/{product}/reviews/{review}','ProductsController@destroy_review');

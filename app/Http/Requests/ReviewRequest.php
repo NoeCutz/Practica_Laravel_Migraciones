@@ -27,7 +27,7 @@ class ReviewRequest extends FormRequest
             'name_of_critic' => 'required | string',
             'title' => 'required | string',
             'content' => 'required | string',
-            'date' => 'required | string'
+            'date' => 'required | date'
         ];
     }
 }

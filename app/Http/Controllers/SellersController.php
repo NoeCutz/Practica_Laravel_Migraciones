@@ -53,9 +53,8 @@ class SellersController extends Controller
       $address = new Address($attributes);
       if($seller -> address === null){
         $seller->address()->save($address);
-
       }else{
-        $seller ->address->update($address);
+        $seller ->address->update($attributes);
       }
       return Response::json($address);
     }

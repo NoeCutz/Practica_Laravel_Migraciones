@@ -9,79 +9,56 @@ use App\Seller;
 use App\Review;
 use Response;
 use App\Http\Requests\ProductRequest;
+use App\Http\Requests\ProductUpdateRequest;
+use App\Http\Requests\ProductUpdatePartialRequest;
+use App\Http\Requests\ReviewRequest;
+use Illuminate\Support\Facades\Input;
 
 class ProductsController extends Controller
 {
   public function index(){
-    $products = Product::all();
-    $list_products = array();
-    foreach($products as $i => $product){
-      $product_attributes = [$product, $product -> seller(), $product -> labels()];
-      $list_products[] = $product_attributes;
-    }
-    return Response::json($list_products);
+    return Response::json(Product::with('seller','labels')->get());
   }
 
   public function show(Product $product)
   {
-    $product_attributes = [$product, $product -> seller, $product -> labels];
-
-    return Response::json($product_attributes);
+    return Response::json($product->load('seller','labels'));
   }
 
   public function store(ProductRequest $request)
   {
-    $attributes_product = [$request-> input('name') , $request -> input('price'), $request -> input('description')];
-    $product= Product::create($attributes_product);
-    $labels = $request -> input('labels');
-    $seller_id = $request ->input('seller_id');
-    $seller = Seller::findOrFail($seller_id);
-    $product -> labels() -> save($labels);
-    $product -> seller() -> save($seller);
+    $attributes_product = Input::only('name','price','description');
 
-    return Response::json($product);
+    $product= new Product($attributes_product);
+    $seller_id = $request->input('seller_id');
+    $product ->seller()->associate($seller_id);
+    $product-> save();
+    $labels = $request -> input('labels');
+    //$product -> labels() -> save($labels);
+    foreach ($labels as $label_name) {
+      $label = Label::firstOrCreate(['name' => $label_name]);
+      $product -> labels() -> save($label);
+    }
+
+    return Response::json($product -> load('seller','labels'));
   }
 
-  public function update(ProductRequest $request,Product $product)
+  public function update(ProductUpdateRequest $request,Product $product)
   {
-    $attributes_product = [$request-> input('name') , $request -> input('price'), $request -> input('description')];
-    $product -> update($attributes_product);
-    $labels = $request -> input('labels');
-
-    $sellers = Product::all('id');
-    $id_seller = $request -> input('seller');
-    $seller = $sellers -> get("id",$id_seller);
-    $product -> labels() -> update($labels);
-    $product -> seller() -> update($seller);
-
-    return Response::json($product);
+    $attributes= $request -> all();
+    $product -> update($attributes);
+    return Response::json($product->load('seller','labels'));
   }
-  public function update_partial(Request $request,Product $product)
+
+  public function update_partial(ProductUpdatePartialRequest $request,Product $product)
   {
-    $attributes_product = [$request-> input('name') , $request -> input('price'), $request -> input('description')];
-    $product -> update($attributes_product);
-    $labels = $request -> input('labels');
-
-    $sellers = Product::all('id');
-    $id_seller = $request -> input('seller');
-    $seller = $sellers -> get("id",$id_seller);
-
-    $product -> labels() -> update($labels);
-    $product -> seller() -> update($seller);
-
-    return Response::json($product);
+    $attributes = $request -> all();
+    $product -> update($attributes);
+    return Response::json($product-> load('seller','labels'));
   }
-
 
   public function destroy(Product $product)
   {
-
-    $reviews = $product -> reviews() ;
-
-    for($i=0; $i<$reviews->count();$i++){
-      $review = $reviews -> get("id",$i+1);
-      $review -> delete();
-    }
     $product-> delete();
     return Response::json([],204);
   }
@@ -91,18 +68,18 @@ class ProductsController extends Controller
     $attributes = $request->all();
     $review = new Review($attributes);
     $product->reviews()->save($review);
-    return Response::json($review);
+    return Response::json($product->load ('reviews'));
   }
 
   public function index_reviews(Product $product)
   {
-    $reviews = $product -> reviews();
+    $reviews = $product -> reviews;
     return Response::json($reviews);
   }
 
-  public function destroy_review(Product $product)
+  public function destroy_review(Product $product, Review $review)
   {
-    $product->reviews -> delete();
+    $review -> delete();
     return Response::json([],204);
   }
 

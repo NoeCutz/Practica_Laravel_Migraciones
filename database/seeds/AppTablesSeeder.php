@@ -36,11 +36,14 @@ class AppTablesSeeder extends Seeder
        }
 
 
-       $products_id=App\Product::all('id');
+       $products_ids=App\Product::all('id');
 
        for($i=1;$i<=$numOfReviews;$i++){
-        factory(\App\Review::class,$numOfReviews)->create(
-          ['product_id'=>$products_id->get('id',$i)]);
+         
+         $product_id = $products_ids->get('id',$i);
+        factory(\App\Review::class,$numOfReviews)->create([
+          'product_id'=>$product_id
+        ]);
        }
 
     }
